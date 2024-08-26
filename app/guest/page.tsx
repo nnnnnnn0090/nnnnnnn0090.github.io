@@ -25,6 +25,7 @@ export default function Guest() {
   
     try {
       const res = await fetch("http://nnnnnnn0090.starfree.jp", {
+        referrerPolicy: 'no-referrer-when-downgrade',
         method: "POST",
         headers: {
           "Content-Type": "application/json",
