@@ -18,7 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <meta name="referrer" content="no-referrer-when-downgrade"/>
+      </head>
       <body>
         <ThemeProvider
           attribute="class"
