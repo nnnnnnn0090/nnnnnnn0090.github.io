@@ -24,7 +24,7 @@ export default function Guest() {
     await wait(300);
   
     try {
-      const res = await fetch("http://nnnnnnn0090.starfree.jp", {
+      const res = await fetch("https://cf588464.cloudfree.jp/blog/", {
         referrerPolicy: 'no-referrer',
         method: "POST",
         headers: {
