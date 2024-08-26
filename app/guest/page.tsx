@@ -21,7 +21,7 @@ export default function Guest() {
     e.preventDefault()
     setIsLoading(true)
 
-    await wait(500);
+    await wait(300);
 
     try {
       const res = await fetch("/api/login", {

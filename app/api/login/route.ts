@@ -1,9 +1,17 @@
-export async function GET() {
+export async function POST(request) {
     try {
-        // 外部 URL からデータを取得
-        const response = await fetch("http://nnnnnnn0090.starfree.jp/index.php");
+        // リクエストボディをJSONとしてパース
+        const { password } = await request.json();
 
-        // レスポンスが成功でない場合、エラーメッセージを返す
+        // 外部 URL からデータを取得
+        const response = await fetch("http://nnnnnnn0090.starfree.jp/index.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password }),
+        });
+
         if (!response.ok) {
             return new Response(
                 JSON.stringify({ error: "Failed to fetch data" }),
@@ -16,7 +24,7 @@ export async function GET() {
 
         // JSON レスポンスを返す
         return new Response(
-            JSON.stringify({ content: text }),
+            JSON.stringify({ content: text, receivedPassword: password }), // パスワードもレスポンスに含める例
             { status: 200, headers: { "Content-Type": "application/json" } }
         );
     } catch (error) {
