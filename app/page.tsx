@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import Image from "next/image";
 import Link from 'next/link';
@@ -38,6 +38,7 @@ export default function Home() {
             Zenn
           </p>
         </Link>
+        {/* <Link href={"/guest"}>Guest Area</Link> */}
       </div>
 
       <div className="absolute top-4 right-4">
