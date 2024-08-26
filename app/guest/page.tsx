@@ -18,29 +18,29 @@ export default function Guest() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-
+    e.preventDefault();
+    setIsLoading(true);
+  
     await wait(300);
-
+  
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch("http://nnnnnnn0090.starfree.jp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ password }),
-      })
-
-      const data = await res.json()
-
-      if (res.ok) {
+      });
+  
+      if (res.status === 200) {
         toast({
           title: "ログイン成功",
           description: "ゲストエリアにアクセスできます。",
-        })
+        });
+      } else if (res.status === 401) {
+        throw new Error("パスワードが違います。");
       } else {
-        throw new Error(data.message || "ログインに失敗しました。")
+        throw new Error("ログインに失敗しました。");
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -51,10 +51,10 @@ export default function Guest() {
         });
       }
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
-
+  
   return (
     <main className="h-screen w-screen flex justify-center items-center relative overflow-hidden bg-gradient-to-br from-background to-muted">
       <div className="absolute top-4 right-4 z-50">
