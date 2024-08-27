@@ -75,7 +75,7 @@ const UpdatePrompt = () => {
       setLoading(true)
       try {
         const data: BlogPost[] = await fetchFromApi("https://cf588464.cloudfree.jp/blog/articles.php", authToken);
-        const article = data.find(post => post.id === parseInt(id || ''))
+        const article = data.find(post => post.id == parseInt(id || ''))
         setPost(article || null)
       } catch (err) {
         console.error('Failed to load the blog post:', err)
