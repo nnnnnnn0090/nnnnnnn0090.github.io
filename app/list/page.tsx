@@ -49,7 +49,7 @@ export default function Home() {
         const data: BlogPost[] = await fetchFromApi("https://cf588464.cloudfree.jp/blog/articles.php", authToken);
         setBlogPosts(data);
       } catch {
-        
+
       } finally {
         await wait(30);
         setIsLoaded(true);
@@ -95,11 +95,11 @@ export default function Home() {
             <article className="bg-card/80 backdrop-blur-md rounded-lg shadow-md overflow-hidden h-full hover:bg-muted hover:scale-95 hover:shadow-xl transition-all duration-300">
               <div className="p-6 flex flex-col h-full">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">{post.date}</span>
-                  <span className="text-sm text-gray-400">{post.author}</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{post.date}</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{post.author}</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-gray-100">{post.title}</h3>
-                <p className="text-gray-300 text-sm flex-grow">{post.excerpt}</p>
+                <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-gray-200">{post.title}</h3>
+                <p className="text-gray-700 dark:text-gray-300 text-sm flex-grow">{post.excerpt}</p>
               </div>
             </article>
           </Link>

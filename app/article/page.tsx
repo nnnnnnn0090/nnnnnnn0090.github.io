@@ -43,7 +43,7 @@ const UpdatePrompt = () => {
         const authToken = localStorage.getItem('X-Auth-Token');
         const response = await fetch("https://cf588464.cloudfree.jp/blog/articles.php", {
           method: "GET",
-          headers: {'X-Auth-Token': authToken ?? ''},
+          headers: { 'X-Auth-Token': authToken ?? '' },
         })
 
         if (!response.ok) {
@@ -72,7 +72,7 @@ const UpdatePrompt = () => {
         const authToken = localStorage.getItem('X-Auth-Token');
         const res = await fetch("https://cf588464.cloudfree.jp/blog/authcheck.php", {
           method: "GET",
-          headers: {'X-Auth-Token': authToken ?? ''},
+          headers: { 'X-Auth-Token': authToken ?? '' },
         });
 
         if (res.status === 401) {
@@ -88,7 +88,7 @@ const UpdatePrompt = () => {
         console.error('Authentication check failed:', error)
       }
     }
-    
+
     auth()
   }, [])
 
@@ -110,11 +110,11 @@ const UpdatePrompt = () => {
         <article className="bg-card/80 backdrop-blur-md rounded-lg shadow-md overflow-hidden mb-12">
           <div className="p-6">
             <div className="flex justify-between items-center mb-4">
-              <span className="text-sm text-gray-400">{post.date}</span>
-              <span className="text-sm text-gray-400">{post.author}</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">{post.date}</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">{post.author}</span>
             </div>
-            <h1 className="text-2xl font-bold mb-4 text-gray-100">{post.title}</h1>
-            <div className="text-gray-300">
+            <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">{post.title}</h1>
+            <div className="text-gray-800 dark:text-gray-300">
               <MarkdownRenderer>{post.content}</MarkdownRenderer>
             </div>
           </div>
