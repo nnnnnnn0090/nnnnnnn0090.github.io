@@ -51,7 +51,7 @@ export default function Base({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <div className={`h-6 w-6 fixed bottom-8 right-8`}>
+      <div className={`h-6 w-6 fixed bottom-8 right-8 z-50`}>
         <ModeToggle />
       </div>
 
