@@ -5,8 +5,9 @@ import { useState, useEffect } from 'react'
 import Base from '../base'
 import { GithubIcon, TwitterIcon, LinkedinIcon } from 'lucide-react'
 import nextConfig from '../../next.config.mjs'
-// import MarkdownRenderer from '../../components/markdown'
+import MarkdownRenderer from '../../components/markdown'
 import { toast } from "@/components/ui/use-toast"
+import { Suspense } from "react";
 
 interface BlogPost {
   id: number;
@@ -82,45 +83,46 @@ export default function Home() {
   })
 
   if (loading) {
-    return <p>Loading...</p>
+    return <Suspense><p>Loading...</p></Suspense>
   }
 
   if (error) {
-    return <p>{error}</p>
+    return <Suspense><p>{error}</p></Suspense>
   }
 
   if (!post) {
-    return <p>Post not found</p>
+    return <Suspense><p>Post not found</p></Suspense>
   }
 
   return (
-    <Base>
-      <main className="container mx-auto px-4">
-        <article className="bg-card/80 backdrop-blur-md rounded-lg shadow-md overflow-hidden mb-12">
-          <div className="p-6">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-sm text-gray-400">{post.date}</span>
-              <span className="text-sm text-gray-400">{post.author}</span>
+    <Suspense>
+      <Base>
+        <main className="container mx-auto px-4">
+          <article className="bg-card/80 backdrop-blur-md rounded-lg shadow-md overflow-hidden mb-12">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-sm text-gray-400">{post.date}</span>
+                <span className="text-sm text-gray-400">{post.author}</span>
+              </div>
+              <h1 className="text-2xl font-bold mb-4 text-gray-100">{post.title}</h1>
+              <p className="text-gray-300">
+                <MarkdownRenderer>{post.content}</MarkdownRenderer>
+              </p>
             </div>
-            <h1 className="text-2xl font-bold mb-4 text-gray-100">{post.title}</h1>
-            <p className="text-gray-300">
-            {post.content}
-              {/* <MarkdownRenderer>{post.content}</MarkdownRenderer> */}
-            </p>
-          </div>
-        </article>
-      </main>
+          </article>
+        </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 bg-card/80 backdrop-blur-md shadow-lg p-4">
-        <div className="flex justify-center space-x-4">
-          <a href="https://github.com/nnnnnnn0090" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <GithubIcon className="h-6 w-6 text-gray-400 hover:text-gray-100 transition-colors duration-200" />
-          </a>
-          <a href="https://x.com/nnnnnnn0090" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-            <TwitterIcon className="h-6 w-6 text-gray-400 hover:text-gray-100 transition-colors duration-200" />
-          </a>
-        </div>
-      </footer>
-    </Base>
+        <footer className="fixed bottom-0 left-0 right-0 bg-card/80 backdrop-blur-md shadow-lg p-4">
+          <div className="flex justify-center space-x-4">
+            <a href="https://github.com/nnnnnnn0090" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <GithubIcon className="h-6 w-6 text-gray-400 hover:text-gray-100 transition-colors duration-200" />
+            </a>
+            <a href="https://x.com/nnnnnnn0090" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <TwitterIcon className="h-6 w-6 text-gray-400 hover:text-gray-100 transition-colors duration-200" />
+            </a>
+          </div>
+        </footer>
+      </Base>
+    </Suspense>
   )
 }
