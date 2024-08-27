@@ -37,9 +37,9 @@ export default function Base({ children }: { children: React.ReactNode }) {
               priority
             />
           </Link>
-          <div className={`h-6 w-6 absolute top-2 right-24 z-50`}>
-            <ModeToggle />
-          </div>
+          <div
+            className="md:flex transition-transform duration-300 ease-in-out"
+          >
           <button
             className="md:flex transition-transform duration-300 ease-in-out"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -47,8 +47,13 @@ export default function Base({ children }: { children: React.ReactNode }) {
           >
             <MenuIcon className={`h-6 w-6 text-gray-600 dark:text-gray-300 transition-colors duration-200 ${isMenuOpen ? 'text-gray-900 dark:text-gray-100' : ''} transition-transform duration-300 ${isMenuOpen ? 'rotate-90' : 'rotate-0'}`} />
           </button>
+          </div>
         </div>
       </header>
+
+      <div className={`h-6 w-6 fixed bottom-8 right-8`}>
+        <ModeToggle />
+      </div>
 
       {/* Backdrop */}
       <div
