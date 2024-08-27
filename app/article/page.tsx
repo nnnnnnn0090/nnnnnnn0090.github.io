@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import Base from '../base'
 import { GithubIcon, TwitterIcon, LinkedinIcon } from 'lucide-react'
 import nextConfig from '../../next.config.mjs'
-import MarkdownRenderer from '../../components/markdown'
+// import MarkdownRenderer from '../../components/markdown'
 import { toast } from "@/components/ui/use-toast"
 
 interface BlogPost {
@@ -104,7 +104,8 @@ export default function Home() {
             </div>
             <h1 className="text-2xl font-bold mb-4 text-gray-100">{post.title}</h1>
             <p className="text-gray-300">
-              <MarkdownRenderer>{post.content}</MarkdownRenderer>
+            {post.content}
+              {/* <MarkdownRenderer>{post.content}</MarkdownRenderer> */}
             </p>
           </div>
         </article>
