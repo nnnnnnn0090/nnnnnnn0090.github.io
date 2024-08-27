@@ -1,8 +1,6 @@
-// "use client";
-
 import Image from "next/image";
 import Link from 'next/link';
-import { ModeToggle } from "@/app/dark-toggle"
+import { ModeToggle } from "@/app/dark-toggle";
 
 import nextConfig from "../next.config.mjs";
 const BASE_PATH = nextConfig.basePath || "";
@@ -38,10 +36,14 @@ export default function Home() {
             Zenn
           </p>
         </Link>
-        {/* <Link href={"/guest"}>Guest Area</Link> */}
       </div>
 
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 flex items-center space-x-4">
+        <Link href="/guest" passHref>
+          <p className="border dark:border-gray-800 px-4 py-2 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800">
+            Guest Area
+          </p>
+        </Link>
         <ModeToggle />
       </div>
     </main>
