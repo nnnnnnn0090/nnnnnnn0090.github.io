@@ -40,7 +40,7 @@ export default function Home() {
 
       <div className="absolute top-4 right-4 flex items-center space-x-4">
         <Link href="/guest" passHref>
-          <p className="border dark:border-gray-800 px-4 py-2 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800">
+          <p className="border dark:border-gray-800 px-4 py-1.5 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-800">
             Guest Area
           </p>
         </Link>
