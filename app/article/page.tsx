@@ -130,7 +130,7 @@ const UpdatePrompt = () => {
 
   return (
     <Base>
-      <main className="container mx-auto px-4">
+      <main className="container mx-auto px-2">
         <article className="bg-card/80 backdrop-blur-md rounded-lg shadow-md overflow-hidden mb-12">
           <div className="p-6">
             <div className="flex justify-between items-center mb-4">
