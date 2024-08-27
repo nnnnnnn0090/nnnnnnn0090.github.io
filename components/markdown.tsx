@@ -21,7 +21,7 @@ export default async function MarkdownRenderer({ children: markdown }: MarkdownR
   })
 
   return (
-    <article className="mb-32 znc">
+    <article className="znc">
       <Head>
         <script src="https://embed.zenn.studio/js/listen-embed-event.js"></script>
       </Head>
