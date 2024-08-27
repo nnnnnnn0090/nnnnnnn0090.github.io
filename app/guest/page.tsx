@@ -39,7 +39,7 @@ export default function Guest() {
           description: "ゲストエリアにアクセスできます。",
         });
         await wait(500);
-        window.location.href = "/list";
+        // window.location.href = "/list";
       } else if (res.status === 401) {
         throw new Error("パスワードが違います。");
       } else {
