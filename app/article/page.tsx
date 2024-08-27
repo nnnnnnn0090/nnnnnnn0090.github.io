@@ -1,23 +1,31 @@
-"use client"
+'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Base from '../base'
-import { GithubIcon, TwitterIcon, LinkedinIcon } from 'lucide-react'
+import { GithubIcon, TwitterIcon } from 'lucide-react'
 import nextConfig from '../../next.config.mjs'
 import MarkdownRenderer from '../../components/markdown'
 import { toast } from "@/components/ui/use-toast"
-import { Suspense } from "react";
+import { PuffLoader } from 'react-spinners'
 
 interface BlogPost {
-  id: number;
-  date: string;
-  title: string;
-  author: string;
-  content: string;
+  id: number
+  date: string
+  title: string
+  author: string
+  content: string
 }
 
 const BASE_PATH = nextConfig.basePath || ""
+
+const LoadingAnimation = () => (
+  <main className="flex flex-col h-[calc(100dvh)] text-gray-100  from-background to-muted relative overflow-hidden">
+    <div className="flex justify-center items-center h-[calc(100dvh)]">
+      <PuffLoader color="#fff" size={100} />
+    </div>
+  </main>
+)
 
 const UpdatePrompt = () => {
   const searchParams = useSearchParams()
@@ -28,8 +36,8 @@ const UpdatePrompt = () => {
   const [error, setError] = useState<string | null>(null)
 
   const wait = (ms: number): Promise<void> => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
   
   useEffect(() => {
     if (id) {
@@ -42,7 +50,7 @@ const UpdatePrompt = () => {
               "Content-Type": "application/json",
             },
             credentials: 'include',
-          });
+          })
           if (!response.ok) {
             throw new Error('Network response was not ok')
           }
@@ -65,33 +73,34 @@ const UpdatePrompt = () => {
         const res = await fetch("https://cf588464.cloudfree.jp/blog/authcheck.php", {
           method: "GET",
           credentials: 'include',
-        });
+        })
   
         if (res.status === 401) {
           toast({
             title: "期限切れ",
             description: "再度ログインしてください。",
             variant: "destructive",
-          });
-          await wait(1000);
-          window.location.href = "/guest";
+          })
+          await wait(1000)
+          window.location.href = "/guest"
         }
       } catch (error) {
+        // Handle error
       }
     }
     auth()
-  })
+  }, [])
 
   if (loading) {
-    return <p>Loading...</p>
+    return <LoadingAnimation />
   }
 
   if (error) {
-    return <p>{error}</p>
+    return <p className="text-center text-red-500 font-bold text-xl">{error}</p>
   }
 
   if (!post) {
-    return <p>Post not found</p>
+    return <p className="text-center text-yellow-500 font-bold text-xl">Post not found</p>
   }
 
   return (
@@ -104,9 +113,9 @@ const UpdatePrompt = () => {
               <span className="text-sm text-gray-400">{post.author}</span>
             </div>
             <h1 className="text-2xl font-bold mb-4 text-gray-100">{post.title}</h1>
-            <p className="text-gray-300">
+            <div className="text-gray-300">
               <MarkdownRenderer>{post.content}</MarkdownRenderer>
-            </p>
+            </div>
           </div>
         </article>
       </main>
@@ -127,9 +136,9 @@ const UpdatePrompt = () => {
 
 const Page = () => {
   return (
-      <Suspense>
-          <UpdatePrompt />
-      </Suspense>
+    <Suspense fallback={<LoadingAnimation />}>
+      <UpdatePrompt />
+    </Suspense>
   )
 }
 
