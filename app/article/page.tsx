@@ -25,6 +25,26 @@ const LoadingAnimation = () => (
   </main>
 )
 
+const fetchFromApi = async (url: string, token: string | null) => {
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        'X-Auth-Token': token ?? '',
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('API request failed:', error);
+    throw error;
+  }
+};
+
 const UpdatePrompt = () => {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
@@ -38,34 +58,26 @@ const UpdatePrompt = () => {
   }
 
   useEffect(() => {
+    const authToken = localStorage.getItem('X-Auth-Token');
+
     const fetchPost = async () => {
       setLoading(true)
       try {
-        const authToken = localStorage.getItem('X-Auth-Token');
-        const response = await fetch("https://cf588464.cloudfree.jp/blog/articles.php", {
-          method: "GET",
-          headers: { 'X-Auth-Token': authToken ?? '' },
-        })
-
-        if (!response.ok) {
-          throw new Error(`Network response was not ok, status: ${response.status}`)
-        }
-
-        const data: BlogPost[] = await response.json()
+        const data: BlogPost[] = await fetchFromApi("https://cf588464.cloudfree.jp/blog/articles.php", authToken);
         const article = data.find(post => post.id === parseInt(id || ''))
         setPost(article || null)
       } catch (err) {
         console.error('Failed to load the blog post:', err)
         setError('Failed to load the blog post')
       } finally {
+        await wait(30);
         setLoading(false)
       }
-    }
+    };
 
-    if (id) {
-      fetchPost()
-    }
-  }, [id])
+    fetchPost();
+  }, []);
+
 
   useEffect(() => {
     const auth = async () => {
