@@ -17,13 +17,24 @@ interface BlogPost {
   excerpt: string;
 }
 
-const LoadingAnimation = () => (
-  <main className="flex flex-col h-[calc(100dvh)] text-gray-100 from-background to-muted relative overflow-hidden">
-    <div className="flex justify-center items-center h-[calc(100dvh)]">
-      <PuffLoader color="#fff" size={100} />
-    </div>
-  </main>
-)
+const LoadingAnimation = () => {
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    const currentTheme = document.documentElement.getAttribute('class');
+    setTheme(currentTheme || 'light');
+  }, []);
+
+  const loaderColor = theme === 'dark' ? '#fff' : '#000';
+
+  return (
+    <main className="flex flex-col h-[calc(100dvh)] text-gray-100 bg-background dark:bg-black dark:text-gray-200 relative overflow-hidden">
+      <div className="flex justify-center items-center h-[calc(100dvh)]">
+        <PuffLoader color={loaderColor} size={50} />
+      </div>
+    </main>
+  );
+};
 
 const fetchFromApi = async (url: string, token: string | null) => {
   try {

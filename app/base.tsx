@@ -5,6 +5,7 @@ import { MenuIcon, XIcon, HomeIcon, LogOutIcon, GithubIcon, TwitterIcon } from '
 import Link from 'next/link'
 import Image from "next/image"
 import nextConfig from "../next.config.mjs"
+import { ModeToggle } from "@/app/dark-toggle";
 
 const BASE_PATH = nextConfig.basePath || ""
 
@@ -21,7 +22,7 @@ export default function Base({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <main className="flex flex-col min-h-screen text-gray-100 bg-gradient-to-br from-gray-50 to-gray-200 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
+    <main className="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
       {/* Header */}
       <header className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-card/80 backdrop-blur-md shadow-lg transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -36,6 +37,9 @@ export default function Base({ children }: { children: React.ReactNode }) {
               priority
             />
           </Link>
+          <div className={`h-6 w-6 absolute top-2 right-24 z-50`}>
+            <ModeToggle />
+          </div>
           <button
             className="md:flex transition-transform duration-300 ease-in-out"
             onClick={() => setIsMenuOpen(!isMenuOpen)}

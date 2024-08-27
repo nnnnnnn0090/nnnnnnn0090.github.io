@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import Link from 'next/link'
 
 export default function Guest() {
   const [password, setPassword] = useState("");
@@ -116,7 +117,9 @@ export default function Guest() {
           </form>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button variant="outline" disabled={isLoading}>キャンセル</Button>
+          <Link href="/">
+            <Button variant="outline" disabled={isLoading}>キャンセル</Button>
+          </Link>
           <Button type="submit" onClick={handleSubmit} disabled={isLoading}>
             {isLoading ? (
               <>

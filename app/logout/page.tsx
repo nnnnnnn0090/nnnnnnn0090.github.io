@@ -16,10 +16,10 @@ export default function LogoutPage() {
   }, [router])
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       <Loader2 className="h-12 w-12 animate-spin text-blue-500 mb-4" />
       <h1 className="text-2xl font-bold mb-2">ログアウト中...</h1>
-      <p className="text-gray-400">まもなくホームページにリダイレクトします</p>
+      <p className="text-gray-600 dark:text-gray-400">まもなくホームページにリダイレクトします</p>
     </div>
   )
 }
