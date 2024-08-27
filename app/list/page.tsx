@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { toast } from "@/components/ui/use-toast"
 
 interface BlogPost {
-  id: number;
+  id: string
   date: string;
   title: string;
   author: string;
