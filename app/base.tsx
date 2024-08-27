@@ -25,15 +25,17 @@ export default function Base({ children }: { children: React.ReactNode }) {
       {/* Header */}
       <header className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-card/80 backdrop-blur-md shadow-lg transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Image
-            className="relative dark:invert"
-            src={`${BASE_PATH}/logo.png`}
-            alt="Logo"
-            width={180}
-            height={40}
-            quality={100}
-            priority
-          />
+          <Link href="/">
+            <Image
+              className="relative dark:invert"
+              src={`${BASE_PATH}/logo.png`}
+              alt="Logo"
+              width={180}
+              height={40}
+              quality={100}
+              priority
+            />
+          </Link>
           <button
             className="md:flex transition-transform duration-300 ease-in-out"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
