@@ -13,7 +13,8 @@ interface BlogPost {
   date: string
   title: string
   author: string
-  content: string
+  content: string;
+  excerpt: string;
 }
 
 const LoadingAnimation = () => (

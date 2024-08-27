@@ -10,6 +10,7 @@ interface BlogPost {
   date: string;
   title: string;
   author: string;
+  content: string;
   excerpt: string;
 }
 
@@ -49,7 +50,6 @@ export default function Home() {
         const data: BlogPost[] = await fetchFromApi("https://cf588464.cloudfree.jp/blog/articles.php", authToken);
         setBlogPosts(data);
       } catch {
-
       } finally {
         await wait(30);
         setIsLoaded(true);
