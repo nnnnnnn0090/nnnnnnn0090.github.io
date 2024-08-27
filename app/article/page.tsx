@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation'
 import { useState, useEffect, Suspense } from 'react'
 import Base from '../base'
 import { GithubIcon, TwitterIcon } from 'lucide-react'
-import nextConfig from '../../next.config.mjs'
 import MarkdownRenderer from '../../components/markdown'
 import { toast } from "@/components/ui/use-toast"
 import { PuffLoader } from 'react-spinners'
@@ -17,10 +16,8 @@ interface BlogPost {
   content: string
 }
 
-const BASE_PATH = nextConfig.basePath || ""
-
 const LoadingAnimation = () => (
-  <main className="flex flex-col h-[calc(100dvh)] text-gray-100  from-background to-muted relative overflow-hidden">
+  <main className="flex flex-col h-[calc(100dvh)] text-gray-100 from-background to-muted relative overflow-hidden">
     <div className="flex justify-center items-center h-[calc(100dvh)]">
       <PuffLoader color="#fff" size={100} />
     </div>
@@ -38,31 +35,33 @@ const UpdatePrompt = () => {
   const wait = (ms: number): Promise<void> => {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
-  
+
   useEffect(() => {
-    if (id) {
-      const fetchPost = async () => {
-        setLoading(true)
-        try {
-          const response = await fetch("https://cf588464.cloudfree.jp/blog/articles.php", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: 'include',
-          })
-          if (!response.ok) {
-            throw new Error('Network response was not ok')
-          }
-          const data: BlogPost[] = await response.json()
-          const article = data.find(post => post.id === parseInt(id))
-          setPost(article || null)
-        } catch (err) {
-          setError('Failed to load the blog post')
-        } finally {
-          setLoading(false)
+    const fetchPost = async () => {
+      setLoading(true)
+      try {
+        const authToken = localStorage.getItem('X-Auth-Token');
+        const response = await fetch("https://cf588464.cloudfree.jp/blog/articles.php", {
+          method: "GET",
+          headers: {'X-Auth-Token': authToken ?? ''},
+        })
+
+        if (!response.ok) {
+          throw new Error(`Network response was not ok, status: ${response.status}`)
         }
+
+        const data: BlogPost[] = await response.json()
+        const article = data.find(post => post.id === parseInt(id || ''))
+        setPost(article || null)
+      } catch (err) {
+        console.error('Failed to load the blog post:', err)
+        setError('Failed to load the blog post')
+      } finally {
+        setLoading(false)
       }
+    }
+
+    if (id) {
       fetchPost()
     }
   }, [id])
@@ -70,24 +69,26 @@ const UpdatePrompt = () => {
   useEffect(() => {
     const auth = async () => {
       try {
+        const authToken = localStorage.getItem('X-Auth-Token');
         const res = await fetch("https://cf588464.cloudfree.jp/blog/authcheck.php", {
           method: "GET",
-          credentials: 'include',
-        })
-  
+          headers: {'X-Auth-Token': authToken ?? ''},
+        });
+
         if (res.status === 401) {
           toast({
             title: "期限切れ",
             description: "再度ログインしてください。",
             variant: "destructive",
-          })
-          await wait(1000)
-          window.location.href = "/guest"
+          });
+          await wait(1000);
+          window.location.href = "/guest";
         }
       } catch (error) {
-        // Handle error
+        console.error('Authentication check failed:', error)
       }
     }
+    
     auth()
   }, [])
 

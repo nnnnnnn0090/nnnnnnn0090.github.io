@@ -13,60 +13,74 @@ interface BlogPost {
   excerpt: string;
 }
 
-export default function Home() {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
-  const [isLoaded, setIsLoaded] = useState(false)
+const wait = (ms: number): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
 
-  const wait = (ms: number): Promise<void> => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  };
-  
+const fetchFromApi = async (url: string, token: string | null) => {
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        'X-Auth-Token': token ?? '',
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('API request failed:', error);
+    throw error;
+  }
+};
+
+export default function Home() {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
+    const authToken = localStorage.getItem('X-Auth-Token');
+
     const fetchBlogPosts = async () => {
       try {
-        const response = await fetch("https://cf588464.cloudfree.jp/blog/articles.php", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: 'include',
-        });
-        const data: BlogPost[] = await response.json()
-        setBlogPosts(data)
-      } catch (error) {
-        console.error('Failed to fetch blog posts:', error)
+        const data: BlogPost[] = await fetchFromApi("https://cf588464.cloudfree.jp/blog/articles.php", authToken);
+        setBlogPosts(data);
+      } catch {
+        
       } finally {
-        await wait(30)
-        setIsLoaded(true)
+        await wait(30);
+        setIsLoaded(true);
       }
-    }
+    };
 
-    fetchBlogPosts()
-  }, [])
-
+    fetchBlogPosts();
+  }, []);
 
   useEffect(() => {
-    const auth = async () => {
+    const checkAuth = async () => {
       try {
-        const res = await fetch("https://cf588464.cloudfree.jp/blog/authcheck.php", {
-          method: "GET",
-          credentials: 'include',
-        });
-  
-        if (res.status === 401) {
-          toast({
-            title: "期限切れ",
-            description: "再度ログインしてください。",
-            variant: "destructive",
-          });
-          await wait(1000);
-          window.location.href = "/guest";
-        }
+        const authToken = localStorage.getItem('X-Auth-Token');
+        await fetchFromApi("https://cf588464.cloudfree.jp/blog/authcheck.php", authToken);
       } catch (error) {
+        if (error instanceof Error) {
+          if (error.message.includes('401')) {
+            toast({
+              title: "期限切れ",
+              description: "再度ログインしてください。",
+              variant: "destructive",
+            });
+            await wait(1000);
+            window.location.href = "/guest";
+          }
+        }
       }
-    }
-    auth()
-  })
+    };
+
+    checkAuth();
+  }, []);
 
   return (
     <Base>
@@ -92,5 +106,5 @@ export default function Home() {
         ))}
       </div>
     </Base>
-  )
+  );
 }

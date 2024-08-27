@@ -1,17 +1,17 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { ModeToggle } from "@/app/dark-toggle"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Loader2 } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
+import { useState, useEffect } from "react";
+import { ModeToggle } from "@/app/dark-toggle";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 export default function Guest() {
-  const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const wait = (ms: number): Promise<void> => {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -30,16 +30,19 @@ export default function Guest() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ password }),
-        credentials: 'include',
       });
 
-      if (res.status === 200) {
+      if (res.ok) {
+        const authToken = res.headers.get('X-Auth-Token');
+        if (authToken) {
+          localStorage.setItem('X-Auth-Token', authToken);
+        }
         toast({
           title: "ログイン成功",
           description: "ゲストエリアにアクセスできます。",
         });
         await wait(500);
-        // window.location.href = "/list";
+        window.location.href = "/list";
       } else if (res.status === 401) {
         throw new Error("パスワードが違います。");
       } else {
@@ -56,29 +59,33 @@ export default function Guest() {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     const auth = async () => {
       try {
-        const res = await fetch("https://cf588464.cloudfree.jp/blog/authcheck.php", {
-          method: "GET",
-          credentials: 'include',
-        });
-  
-        if (res.status === 200) {
-          toast({
-            title: "ログイン済み",
-            description: "ゲストエリアにアクセスできます。",
+        const authToken = localStorage.getItem('X-Auth-Token');
+        if (authToken) {
+          const res = await fetch("https://cf588464.cloudfree.jp/blog/authcheck.php", {
+            method: "GET",
+            headers: { 'X-Auth-Token': authToken },
           });
-          await wait(1000);
-          window.location.href = "/list";
+
+          if (res.status === 200) {
+            toast({
+              title: "ログイン済み",
+              description: "ゲストエリアにアクセスできます。",
+            });
+            await wait(1000);
+            window.location.href = "/list";
+          }
         }
       } catch (error) {
+        console.error('Error during authentication check:', error);
       }
-    }
-    auth()
-  })
+    };
+    auth();
+  }, []);
 
   return (
     <main className="h-[calc(100dvh)] w-screen flex justify-center items-center relative overflow-hidden bg-gradient-to-br from-background to-muted">

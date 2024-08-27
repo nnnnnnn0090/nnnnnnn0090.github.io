@@ -3,24 +3,14 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
 
 export default function LogoutPage() {
   const router = useRouter()
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      try {
-        const res = await fetch("https://cf588464.cloudfree.jp/blog/logout.php", {
-          method: "GET",
-          credentials: 'include',
-        });
-  
-        if (res.status === 200) {
-          window.location.href = "/guest";
-        }
-      } catch (error) {
-      }
+      localStorage.setItem('X-Auth-Token', '');
+      window.location.href = "/guest";
     }, 2000)
     return () => clearTimeout(timer)
   }, [router])
